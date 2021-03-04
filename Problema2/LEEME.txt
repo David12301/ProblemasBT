@@ -1,0 +1,18 @@
+Las funciones que tienen que ver con la lógica del programa son:
+
+void loadChessBoard(const char* fname);
+void drawChessBoard(glm::vec2 initPosition);
+
+Su implementación se encuentra en las líneas 128 y 176 del archivo Window.cpp.
+
+Todo el resto del código es para inicializar la ventana y usar gráficos con las
+librerías de openGL y una librería de código abierto compartida de este sitio web:
+https://learnopengl.com/
+https://github.com/JoeyDeVries/LearnOpenGL/tree/master/src/7.in_practice/3.2d_game/0.full_source
+
+El programa carga los datos de un archivo .txt llamado chess.txt (vease main.cpp).
+Si no encuentra el archivo muestra un mensaje de error en la consola y carga la 
+posición de ajedrez por defecto.
+
+Alternativamente, se puede cargar los datos que desee desde la línea 144 que chanca
+los datos cargados.
