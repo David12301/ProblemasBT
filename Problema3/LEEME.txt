@@ -1,0 +1,39 @@
+Interesante problema que tiene que ver con permutaciones sin repetición. Más precisamente: Permutaciones lexicográficas
+
+Use el sgte. enlace con instrucciones para implementar el algoritmo:
+De: https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+
+1. Find the largest index k such that a[k] < a[k + 1]. If no such index exists, the permutation is the last permutation.
+2. Find the largest index l greater than k such that a[k] < a[l].
+3. Swap the value of a[k] with that of a[l].
+4. Reverse the sequence from a[k + 1] up to and including the final element a[n].
+
+La lógica de mi implementación está en el archivo main.cpp: listAllTicTacToeGames(string fname)
+
+La lógica que checa la condición de victoria esta en la clase Michi (Michi.cpp, Michi.h)
+
+El programa puede recibir un nombre de archivo y si no lo recibe le pondrá por defecto el valor "michi.txt"
+
+Nota:
+
+Dada la naturaleza de la secuencia e implementación, intuí que los repetidos solo ocurren uno después de otro y jamás 
+después de una secuencia única. Por ejemplo, dada la secuencia R1 que se repite una vez, y otras dos secuencias únicas
+S1 y S2, solo se puede dar el caso de esta manera:
+
+R1
+R1
+S1
+S2
+...
+
+y nunca que:
+
+R1
+S1
+R1
+S2
+...
+
+Por eso utilicé una variable ultima_secuencia para eliminar este tipo de repeticiones.
+
+
