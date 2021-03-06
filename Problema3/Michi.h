@@ -28,6 +28,5 @@ public:
 	int checkWinner();
 	int jugadas();
 	void clear();
-	bool all_filled();
 
 };

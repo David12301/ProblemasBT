@@ -8,6 +8,9 @@ De: https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
 3. Swap the value of a[k] with that of a[l].
 4. Reverse the sequence from a[k + 1] up to and including the final element a[n].
 
+Además este artículo me fue útil:
+http://www.se16.info/hgb/tictactoe.htm#:~:text=in%20the%20result.-,How%20many%20Tic%2DTac%2DToe%20(noughts%20and%20crosses),255168%20possible%20games%20in%20total.
+
 La lógica de mi implementación está en el archivo main.cpp: listAllTicTacToeGames(string fname)
 
 La lógica que checa la condición de victoria esta en la clase Michi (Michi.cpp, Michi.h)

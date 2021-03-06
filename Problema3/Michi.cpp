@@ -38,29 +38,64 @@ int Michi::checkWinner()
 		0|x|0
 		x| |
 	*/
-	if ( (choices[0] == choices[1] && choices[1] == choices[2]) || (choices[0] == choices[3] && choices[3] == choices[6]) ) {
+
+	// Horizontal
+
+	if ( (choices[0] == choices[1] && choices[1] == choices[2]) ) {
 		result = checkResult(choices[0]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
 	}
 
-	if (result != Michi::RESULT_NO_RESULT)
-		return result;
-
-	if ( (choices[3] == choices[4] && choices[4] == choices[5]) || (choices[1] == choices[4] && choices[4] == choices[7]) || 
-		(choices[0] == choices[4] && choices[4] == choices[8]) || (choices[2] == choices[4] && choices[4] == choices[6]) ) {
-		result = checkResult(choices[4]);
+	if ((choices[3] == choices[4] && choices[4] == choices[5])) {
+		result = checkResult(choices[3]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
 	}
 
-	if (result != Michi::RESULT_NO_RESULT)
-		return result;
-
-	if ( (choices[6] == choices[7] && choices[7] == choices[8]) || (choices[2] == choices[5] && choices[5] == choices[8]) ) {
-		result = checkResult(choices[8]);
+	if ((choices[6] == choices[7] && choices[7] == choices[8])) {
+		result = checkResult(choices[6]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
 	}
 
-	if (result != Michi::RESULT_NO_RESULT)
-		return result;
+	// Vertical
 
-	if (result == Michi::RESULT_NO_RESULT && all_filled())
+	if ((choices[0] == choices[3] && choices[3] == choices[6])) {
+		result = checkResult(choices[0]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
+	}
+
+	if ((choices[1] == choices[4] && choices[4] == choices[7])) {
+		result = checkResult(choices[1]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
+	}
+
+	if ((choices[2] == choices[5] && choices[5] == choices[8])) {
+		result = checkResult(choices[2]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
+	}
+
+	// Diagonal
+
+	if ((choices[0] == choices[4] && choices[4] == choices[8])) {
+		result = checkResult(choices[0]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
+	}
+
+	if ((choices[2] == choices[4] && choices[4] == choices[6])) {
+		result = checkResult(choices[2]);
+		if (result != Michi::RESULT_NO_RESULT)
+			return result;
+	}
+
+	// Empate (solo puede haber empate cuando el nro de jugadas sea 9 y no haya ganador)
+
+	if (result == Michi::RESULT_NO_RESULT && nro_jugadas == 9)
 		return Michi::RESULT_TIE;
 
 	return result;
@@ -72,7 +107,7 @@ int Michi::checkResult(int c)
 	if (c == Michi::CHOICE_X) {
 		result = Michi::RESULT_WIN_X;
 	}
-	else if (choices[0] == Michi::CHOICE_O) {
+	else if (c == Michi::CHOICE_O) {
 		result = Michi::RESULT_WIN_O;
 	}
 
@@ -82,17 +117,4 @@ int Michi::checkResult(int c)
 int Michi::jugadas() 
 {
 	return this->nro_jugadas;
-}
-
-bool Michi::all_filled()
-{
-	bool result = true;
-	int size = choices.size();
-	for(int i = 0; i < size; i++) 
-	{
-		if (choices[i] == Michi::CHOICE_BLANK)
-			result = false;
-	}
-
-	return result;
 }
