@@ -15,6 +15,5 @@ public:
 	const static string CARD_TYPE_SPADE;
 	const static string CARD_TYPE_HEART;
 	const static string CARD_TYPE_DIAMOND;
-
 };
 
