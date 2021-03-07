@@ -44,62 +44,52 @@ GameResult Player::resolveHand()
 	if ((gResult.type_of_hk = allSameType()) && countValue('T') == 1  && countValue('J') == 1 && countValue('Q') == 1 &&
 		countValue('K') == 1 && countValue('A') == 1) {
 		result = Player::ROYAL_FLUSH;
-		goto lcontinue;
 	}
 
 	// 2. STRAIGHT FLUSH
-	if ((gResult.type_of_hk = allSameType()) && hasStraight()) {
+	else if ((gResult.type_of_hk = allSameType()) && hasStraight()) {
 		gResult.type_of_hk = hand[0].type;
 		result = Player::STRAIGHT_FLUSH;
-		goto lcontinue;
 	}
 
 	// 3. FOUR OF A KIND
-	if (gResult.val_of_hk = hasNRepeat(4)) {
+	else if (gResult.val_of_hk = hasNRepeat(4)) {
 		result = Player::FOUR_OF_A_KIND;
-		goto lcontinue;
 	}
 
 	// 4. FULL HOUSE
-	v1 = hasNRepeat(3);
-	v2 = hasNRepeat(2);
-	// v1 != v2 es porque debe repetirse de distinto valor
-	if (v1 != false && v2 != false && v1 != v2) {
+	// v1 != v2 es porque debe repetirse de distinto valor. La asignación a v1 y v2 se resuelve 
+	// antes de comparar v1 != v2 por el orden de las comparaciones ( a && b && c ) los
+	// statement a y b se resuelven antes que c. En general los statement en una comparación
+	// siempre se resuelven antes de comparar el valor en cuestión
+	else if ( (v1 = hasNRepeat(3)) != false && (v2 = hasNRepeat(2)) != false && v1 != v2) {
 		result = Player::FULL_HOUSE;
-		goto lcontinue;
 	}
 
 	// 5. FLUSH
-	if ((gResult.type_of_hk = allSameType())) {
+	else if ((gResult.type_of_hk = allSameType())) {
 		result = Player::FLUSH;
-		goto lcontinue;
 	}
 
 	// 6. STRAIGHT
-	if (hasStraight()) {
+	else if (hasStraight()) {
 		result = Player::STRAIGHT;
-		goto lcontinue;
 	}
 
 	// 7. THREE_OF_A_KIND
-	if (gResult.val_of_hk = hasNRepeat(3)) {
+	else if (gResult.val_of_hk = hasNRepeat(3)) {
 		result = Player::THREE_OF_A_KIND;
-		goto lcontinue;
 	}
 
 	// 8. TWO PAIRS
-	v1 = hasNRepeat(2);
-	v2 = hasNRepeat(2, v1);
-	if (v1 != false && v2 != false && v1 != v2) {
+	else if ( (v1=hasNRepeat(2)) != false && (v2 = hasNRepeat(2, v1)) != false && v1 != v2) {
 		result = Player::TWO_PAIRS;
-		goto lcontinue;
 	}
 
 	// 9. ONE PAIR
-	if (v1 != false && v2 == false) {
+	else if ((v1=hasNRepeat(2)) != false && (v2=hasNRepeat(2, v1)) == false) {
 		gResult.val_of_hk = v1;
 		result = Player::ONE_PAIR;
-		goto lcontinue;
 	}
 	
 	// 10. HIGH CARD
@@ -107,7 +97,7 @@ GameResult Player::resolveHand()
 		result = Player::HIGH_CARD;
 	}
 
-lcontinue:
+//lcontinue:
 	gResult.hand_kind = result;
 
 	int max = valorMaximo();
