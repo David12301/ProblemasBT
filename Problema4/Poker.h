@@ -9,7 +9,6 @@ public:
 
 	Poker();
 	void loadGamesFromFile(string in_fname, string out_fname);
-	int checkWinner();
 	string str_hand_kind(GameResult p);
 
 };

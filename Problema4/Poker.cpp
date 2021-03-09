@@ -138,11 +138,6 @@ void Poker::loadGamesFromFile(string in_fname, string out_fname)
 	system("pause");
 }
 
-int Poker::checkWinner() 
-{
-	return 0;
-}
-
 string Poker::str_hand_kind(GameResult r)
 {
 	string result = "";

@@ -1,0 +1,33 @@
+
+El core del programa para la lógica de como se comparan las cartas está en la clase Player.cpp.
+Más que nada en el método resolveHand()
+
+En Poker.cpp tenemos loadGamesFromFile(in, out) que carga de un archivo "in", y arroja un archivo "out".
+Los parámetros los recibe por la consola de comandos. Caso contrario tiene valores por defecto: "poker.txt"
+y "output.txt" respectivamente.
+
+El programa abre el archivo de output con notepad.exe al terminar la ejecución.
+
+Para este problema cree algunas clases para manejar la lógica:
+
+Card: Están solo los datos de type: 'C', 'H', 'D' ó 'S'; Ósea, tréboles, corazones, diamantes o espadas respectivamente, y
+val: 1 al 14. Más unas constantes para el tipo de carta.
+
+GameResult:
+	int hand_kind:
+	Tipo de mano con la que tiene, por ejemplo: FLUSH, FULL HOUSE, HIGH CARD, etc.
+	
+	char val_of_hk:
+	Valor máximo del tipo de mano (solo aplica para cuando son iguales o full house), se usa para saber el ganador. Por ejemplo:
+	Par de reyes es mejor que par de 10s
+
+	char type_of_hk:
+	El "tipo" del tipo de mano, es decir si es de corazones, diamantes, etc.
+
+	char max_val:
+	Carta con el valor máximo de la mano.
+
+	int ind_winner:
+	Es 0 si es jugador 1, y 1 si es jugador 2
+
+
