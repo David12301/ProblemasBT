@@ -151,12 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsWorld.cpp" />
     <ClCompile Include="post_processor.cpp" />
     <ClCompile Include="resource_manager.cpp" />
+    <ClCompile Include="Segment.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite_renderer.cpp" />
     <ClCompile Include="Tank.cpp" />
@@ -164,11 +166,13 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="PhysicsWorld.h" />
     <ClInclude Include="post_processor.h" />
     <ClInclude Include="resource_manager.h" />
+    <ClInclude Include="Segment.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="sprite_renderer.h" />

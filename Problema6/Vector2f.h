@@ -1,5 +1,5 @@
 #pragma once
-
+#include <math.h>
 class Vector2f
 {
 public:
@@ -70,5 +70,18 @@ public:
 		float N = n.magnitude();
 		Vector2f r = v - (n * ((v * n) * 2) / (N * N));
 		return r;
+	}
+
+	// Proyectar al vector this (v) en 'onto'
+	Vector2f onto(const Vector2f& onto) const
+	{
+		float d = onto * onto;
+		if (d > 0) { // para evitar division entre 0
+			float dp = (*this) * onto;
+			float m = dp / d;
+			return Vector2f(onto.x * m, onto.y * m);
+		}
+		// Si los dos componentes son 0 
+		return Vector2f(0.0f, 0.0f);
 	}
 };
