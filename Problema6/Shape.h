@@ -6,7 +6,8 @@ class Segment;
 
 class Shape {
 public:
-    virtual bool collidesWith(const Circle& c) const = 0;
-    virtual bool collidesWith(const Segment& s) const = 0;
+    virtual bool collidesWith(const Shape* s, Vector2f* tangent) const = 0;
+    virtual bool collidesWith(const Circle* c, Vector2f* tangent) const = 0;
+    virtual bool collidesWith(const Segment* s, Vector2f* tangent) const = 0;
 };
 

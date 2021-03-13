@@ -1,4 +1,5 @@
 #include "Tank.h"
+#include "Circle.h"
 #include <iostream>
 
 Tank::Tank(glm::vec2 pos, glm::vec2 size, Texture2D sprite, const Texture2D& gun_texture, const Texture2D& arrow_texture, const Texture2D& projectile_texture, 
@@ -106,12 +107,17 @@ void Tank::shootBall()
     projectile->phys.Force.x = initial_shot_speed * cos(rad_angle_shot);
     projectile->phys.Force.y = -initial_shot_speed * sin(rad_angle_shot);
     projectile->phys.Force.y *= 1.5;
+
+    projectile->phys.objCollision = new Circle(projectile->phys.Position.x, projectile->phys.Position.y, projectile->Size.x);
+
+    
+
     initial_shot_speed = 0.0f;
 
     projectiles.push_back(projectile);
 
     if(mWorldRef != nullptr)
-        mWorldRef->Objects.push_back(projectile);
+        mWorldRef->Objects.push_back(&projectile->phys);
 }
 
 void Tank::setPhysicsWorld(PhysicsWorld* ref) 
@@ -122,6 +128,9 @@ void Tank::setPhysicsWorld(PhysicsWorld* ref)
 Tank::~Tank() {
     size_t size = projectiles.size();
     for (int i = 0; i < size; i++) {
+
+        delete projectiles[i]->phys.objCollision;
+
         delete projectiles[i];
     }
 }

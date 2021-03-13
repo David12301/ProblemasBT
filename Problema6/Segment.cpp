@@ -23,14 +23,18 @@ Vector2f Segment::toVector() const {
 
 }
 
-bool Segment::collidesWith(const Circle& c) const {
+bool Segment::collidesWith(const Shape* s, Vector2f* tangent) const {
+    return s->collidesWith(this, tangent);
+}
 
-    if (c.pointInside(Vector2f(this->p1.x, this->p1.y)) || c.pointInside(Vector2f(this->p2.x, this->p2.y))) {
+bool Segment::collidesWith(const Circle* c, Vector2f* tangent) const {
+
+    if (c->pointInside(Vector2f(this->p1.x, this->p1.y)) || c->pointInside(Vector2f(this->p2.x, this->p2.y))) {
         //cout << "true" << endl;
         return true;
     }
 
-    Vector2f v1(c.center.x - this->p1.x, c.center.y - this->p1.y);
+    Vector2f v1(c->center.x - this->p1.x, c->center.y - this->p1.y);
     //cout << "v1(" << v1.x << ", " << v1.y << ")" << endl;
     Vector2f s1 = this->toVector();
 
@@ -42,8 +46,8 @@ bool Segment::collidesWith(const Circle& c) const {
     //cout << "onto_point(" << onto_point.x << ", " << onto_point.y << ")" << endl;
 
     // Luego solo debemos preguntar si el tamaño de esa perpendicular es menor al radio
-    float dx = c.center.x - onto_point.x;
-    float dy = c.center.y - onto_point.y;
+    float dx = c->center.x - onto_point.x;
+    float dy = c->center.y - onto_point.y;
     float distance = sqrt(((double)dx * dx) + ((double)dy * dy));
 
     //cout << "distance with c.center(" << c.center.x << ", " << c.center.y << "): " << distance << endl;
@@ -67,20 +71,21 @@ bool Segment::collidesWith(const Circle& c) const {
     //cout << "pry len: " << proyected_length << endl;
     //cout << "seg len: " << segment_length << endl;
 
-    /*if (distance <= c.radius && segment_length >= proyected_length && w >= 0) {
-        cout << "true" << endl;
+    if (distance <= c->radius && segment_length >= proyected_length && w >= 0) {
+        if (tangent != nullptr) {
+            tangent->x = s1.x;
+            tangent->y = s1.y;
+        }
+        return true;
     }
-    else {
-        cout << "false" << endl;
-    }*/
-
-    return distance <= c.radius && segment_length >= proyected_length && w >= 0;
+    
+    return false;
 }
 
-bool Segment::collidesWith(const Segment& s) const {
+bool Segment::collidesWith(const Segment* s, Vector2f* tangent) const {
     //Usando vectores direccionales como ecuaciones parametricas de cada segmento
     Vector2f v1(this->p2.x - this->p1.x, this->p2.y - this->p1.y);
-    Vector2f v2(s.p2.x - s.p1.x, s.p2.y - s.p1.y);
+    Vector2f v2(s->p2.x - s->p1.x, s->p2.y - s->p1.y);
 
     //cout << "v1: " << "(" << v1.x << ", " << v1.y << ")" << endl;
     //cout << "v2: " << "(" << v2.x << ", " << v2.y << ")" << endl;
@@ -96,7 +101,7 @@ bool Segment::collidesWith(const Segment& s) const {
 
     // Vector direccional apartir de los puntos de origen de los dos segmentos
     // el segmento 2 como punto final
-    Vector2f directionalVector(s.p1.x - this->p1.x, s.p1.y - this->p1.y);
+    Vector2f directionalVector(s->p1.x - this->p1.x, s->p1.y - this->p1.y);
     //cout << "directionalVector: " << "(" << directionalVector.x << ", " << directionalVector.y << ")" << endl;
 
     float t1 = v2.y * directionalVector.x - v2.x * directionalVector.y;
@@ -109,8 +114,8 @@ bool Segment::collidesWith(const Segment& s) const {
     }
 
     // Recalcular el vector dirección. segmento 1 como punto final
-    directionalVector.x = this->p1.x - s.p1.x;
-    directionalVector.y = this->p1.y - s.p1.y;
+    directionalVector.x = this->p1.x - s->p1.x;
+    directionalVector.y = this->p1.y - s->p1.y;
     //cout << "directionalVector: " << "(" << directionalVector.x << ", " << directionalVector.y << ")" << endl;
     float t2 = -v1.y * directionalVector.x + v1.x * directionalVector.y;
     t2 /= det;
@@ -122,6 +127,10 @@ bool Segment::collidesWith(const Segment& s) const {
         return false;
     }
 
+    if (tangent != nullptr) {
+        tangent->x = t1;
+        tangent->y = t2;
+    }
     //cout << "true" << endl;
 
     return true;

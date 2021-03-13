@@ -4,10 +4,11 @@
 
 class PhysicsWorld {
 public:
-	std::vector<GameObject*> Objects;
+	std::vector<PhysicsObject*> Objects;
 	float G, dt, t;
 
 	PhysicsWorld();
 	void Update();
+	void CheckCollisions(PhysicsObject* object);
 	void Round(Vector2f* v);
 };
