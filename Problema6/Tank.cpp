@@ -108,7 +108,10 @@ void Tank::shootBall()
     projectile->phys.Force.y = -initial_shot_speed * sin(rad_angle_shot);
     projectile->phys.Force.y *= 1.5;
 
-    projectile->phys.objCollision = new Circle(projectile->phys.Position.x, projectile->phys.Position.y, projectile->Size.x);
+    projectile->phys.collisionObjectType = PhysicsObject::CollisionObjectType::CIRCLE;
+    projectile->phys.collisionInfo.radius = projectile->Size.x;
+    projectile->phys.collisionResponse = true;
+    //objCollision = new Circle(projectile->phys.Position.x, projectile->phys.Position.y, projectile->Size.x);
 
     
 
@@ -129,7 +132,7 @@ Tank::~Tank() {
     size_t size = projectiles.size();
     for (int i = 0; i < size; i++) {
 
-        delete projectiles[i]->phys.objCollision;
+        //delete projectiles[i]->phys.objCollision;
 
         delete projectiles[i];
     }

@@ -1,6 +1,12 @@
 #include "Segment.h"
 #include "Circle.h"
 
+Segment::Segment() 
+{
+    p1.x = p1.y = 0.0f;
+    p2.x = p2.y = 0.0f;
+}
+
 Segment::Segment(float x1, float y1, float x2, float y2) {
     p1.x = x1;
     p1.y = y1;

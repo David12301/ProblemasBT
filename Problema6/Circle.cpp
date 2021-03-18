@@ -1,6 +1,12 @@
 #include "Circle.h"
 #include "Segment.h"
 
+Circle::Circle() 
+{
+    radius = 0;
+    center.x = 0.0f;
+    center.y = 0.0f;
+}
 Circle::Circle(float x, float y, float r) {
     center.x = x;
     center.y = y;

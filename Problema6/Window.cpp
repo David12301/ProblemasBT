@@ -13,6 +13,7 @@
 #include <sstream>
 #include <fstream>
 #include <math.h>
+#include "Segment.h"
 
 
 static float a = 90.0f;
@@ -62,6 +63,7 @@ Window::Window(int w, int h)
     ResourceManager::LoadTexture("img/gun.png", true, "gun");
     ResourceManager::LoadTexture("img/ball.png", true, "ball");
     ResourceManager::LoadTexture("img/arrow.png", true, "arrow");
+    ResourceManager::LoadTexture("img/line.png", true, "line");
 
     Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), this->width, this->height);
     Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
@@ -147,8 +149,26 @@ void Window::loadObjects()
     tank = new Tank(glm::vec2(0.0f, height-size.y), size, ResourceManager::GetTexture("tank"),
         ResourceManager::GetTexture("gun"), ResourceManager::GetTexture("arrow"), ResourceManager::GetTexture("ball"));
 
-    tank->setPhysicsWorld(this->pworld);
     
+
+    tank->setPhysicsWorld(this->pworld);
+
+    size = glm::vec2(600.0f, 2.0f);
+    GameObject* line1 = new GameObject(glm::vec2(0.0f, height - size.y), size, ResourceManager::GetTexture("line"));
+    line1->phys.Mass = 1.0f;
+    line1->phys.affectedByGravity = false;
+    float x1 = line1->phys.Position.x;
+    float y1 = line1->phys.Position.y;
+    float x2 = x1 + size.x;
+    line1->phys.collisionObjectType = PhysicsObject::CollisionObjectType::SEGMENT;
+    line1->phys.collisionInfo.x1 = x1;
+    line1->phys.collisionInfo.x2 = x2;
+    line1->phys.collisionInfo.y1 = y1;
+    line1->phys.collisionInfo.y2 = y1;
+    line1->phys.collisionResponse = false;
+    line1->phys.Friction.x = 0.1f;
+    line1->phys.Friction.y = 0.1f;
+    line1->phys.ElasticK = 0.9f;
     //size = glm::vec2(20.0f, 80.0f);
     //gun = new GameObject(glm::vec2(tank->Position.x + tank->Size.x/2 - size.x/2, 
     //    tank->Position.y - size.y), size, ResourceManager::GetTexture("gun"));
@@ -164,7 +184,9 @@ void Window::loadObjects()
     //tank->gun = gun;
     //tank->arrow = arrow;
 
+    pworld->Objects.push_back(&line1->phys);
     mObjects.push_back(tank);
+    mObjects.push_back(line1);
     //mObjects.push_back(gun);
     //mObjects.push_back(arrow);
 
