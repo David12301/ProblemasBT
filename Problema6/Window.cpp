@@ -153,7 +153,7 @@ void Window::loadObjects()
 
     tank->setPhysicsWorld(this->pworld);
 
-    size = glm::vec2(600.0f, 2.0f);
+    size = glm::vec2(800.0f, 2.0f);
     GameObject* line1 = new GameObject(glm::vec2(0.0f, height - size.y), size, ResourceManager::GetTexture("line"));
     line1->phys.Mass = 1.0f;
     line1->phys.affectedByGravity = false;
@@ -169,6 +169,37 @@ void Window::loadObjects()
     line1->phys.Friction.x = 0.1f;
     line1->phys.Friction.y = 0.1f;
     line1->phys.ElasticK = 0.9f;
+
+
+    size = glm::vec2(2.0f, 800.0f);
+    GameObject* line2 = new GameObject(glm::vec2(0.0f, 0.0f), size, ResourceManager::GetTexture("line"));
+    line2->phys.Mass = 1.0f;
+    line2->phys.affectedByGravity = false;
+    line2->phys.collisionObjectType = PhysicsObject::CollisionObjectType::SEGMENT;
+    line2->phys.collisionInfo.x1 = 0.0f;
+    line2->phys.collisionInfo.x2 = 0.0f;
+    line2->phys.collisionInfo.y1 = 0.0f;
+    line2->phys.collisionInfo.y2 = size.y;
+    line2->phys.collisionResponse = false;
+    line2->phys.Friction.x = 0.1f;
+    line2->phys.Friction.y = 0.1f;
+    line2->phys.ElasticK = 0.9f;
+
+
+    float x3 = 798.0f;
+    GameObject* line3 = new GameObject(glm::vec2(x3, 0.0f), size, ResourceManager::GetTexture("line"));
+    line3->phys.Mass = 1.0f;
+    line3->phys.affectedByGravity = false;
+    line3->phys.collisionObjectType = PhysicsObject::CollisionObjectType::SEGMENT;
+    line3->phys.collisionInfo.x1 = x3;
+    line3->phys.collisionInfo.x2 = x3;
+    line3->phys.collisionInfo.y1 = 0.0f;
+    line3->phys.collisionInfo.y2 = size.y;
+    line3->phys.collisionResponse = false;
+    line3->phys.Friction.x = 0.1f;
+    line3->phys.Friction.y = 0.1f;
+    line3->phys.ElasticK = 0.9f;
+
     //size = glm::vec2(20.0f, 80.0f);
     //gun = new GameObject(glm::vec2(tank->Position.x + tank->Size.x/2 - size.x/2, 
     //    tank->Position.y - size.y), size, ResourceManager::GetTexture("gun"));
@@ -185,8 +216,13 @@ void Window::loadObjects()
     //tank->arrow = arrow;
 
     pworld->Objects.push_back(&line1->phys);
+    pworld->Objects.push_back(&line2->phys);
+    pworld->Objects.push_back(&line3->phys);
+
     mObjects.push_back(tank);
     mObjects.push_back(line1);
+    mObjects.push_back(line2);
+    mObjects.push_back(line3);
     //mObjects.push_back(gun);
     //mObjects.push_back(arrow);
 

@@ -6,6 +6,7 @@
 #include <GLFW\glfw3.h>
 #include "PhysicsWorld.h"
 #include <vector>
+#include "Projectile.h"
 
 class Tank : public GameObject
 {
@@ -14,7 +15,7 @@ public:
 
 	GameObject* gun;
 	GameObject* arrow;
-	std::vector<GameObject*> projectiles;
+	std::vector<Projectile*> projectiles;
 
 	PhysicsWorld* mWorldRef;
 	Texture2D ptexture;

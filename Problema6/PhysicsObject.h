@@ -19,6 +19,8 @@ public:
 	float ElasticK;
 	bool affectedByGravity;
 	bool collisionResponse;
+	bool isActive;
+	bool shouldRemove;
 	enum CollisionObjectType {CIRCLE, SEGMENT};
 	int collisionObjectType;
 	CollisionInfo collisionInfo;
@@ -32,6 +34,8 @@ public:
 		affectedByGravity = true;
 		collisionResponse = true;
 		collisionObjectType = 0;
+		isActive = true;
+		shouldRemove = false;
 		//objCollision = nullptr;
 	}
 

@@ -13,11 +13,14 @@ PhysicsWorld::PhysicsWorld() {
 
 void PhysicsWorld::Update() {
 
-	size_t size = Objects.size();
-	for (int i = 0; i < size; i++) {
+	
+	for (int i = 0; i < Objects.size(); i++) {
 		PhysicsObject* object = Objects[i];
 
-
+		if (object->shouldRemove) {
+			Objects.erase(Objects.begin() + i);
+			continue;
+		}
 
 		Round(&object->Velocity);
 		Round(&object->Position);
@@ -68,8 +71,8 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 		if (other != object) {
 
 			if (object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE) {
-				this->circleCollider1.center.x = object->Position.x;
-				this->circleCollider1.center.y = object->Position.y;
+				this->circleCollider1.center.x = object->Position.x + object->collisionInfo.radius;
+				this->circleCollider1.center.y = object->Position.y + object->collisionInfo.radius;
 				this->circleCollider1.radius = object->collisionInfo.radius;
 				objCollider1 = &this->circleCollider1;
 			}
@@ -82,8 +85,8 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 			}
 
 			if (other->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE) {
-				this->circleCollider2.center.x = other->Position.x;
-				this->circleCollider2.center.y = other->Position.y;
+				this->circleCollider2.center.x = other->Position.x + other->collisionInfo.radius;
+				this->circleCollider2.center.y = other->Position.y + other->collisionInfo.radius;
 				this->circleCollider2.radius = other->collisionInfo.radius;
 				objCollider2 = &this->circleCollider2;
 			}
@@ -99,9 +102,100 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 
 			if (objCollider1 && objCollider2 && object->collisionResponse) {
 				Vector2f tangent(0.0f, 0.0f);
+
+				
+
 				bool result = objCollider1->collidesWith(objCollider2, &tangent);
 				if (result) {
-					Vector2f reflected = Vector2f::Reflect(object->Velocity, tangent);
+
+					
+
+					
+
+					if (other->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE &&
+						object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE) {
+						// Empujar los circulos una pequeña distancia (suma de radios - distancia de centros)
+						// para que no coincidan en la misma posición entre ellos
+						Circle* c1 = (Circle*)objCollider1;
+						Circle* c2 = (Circle*)objCollider2;
+						float dx = c1->center.x - c2->center.x;
+						float dy = c1->center.y - c2->center.y;
+
+
+						float rsum = c1->radius + c2->radius;
+						float distance = rsum - sqrt(dx * dx + dy * dy);
+
+
+						Vector2f normal = tangent.normal();
+						float angle = atan(normal.y / normal.x);
+
+						float mx = cos(angle) * distance;
+						float my = sin(angle) * distance;
+
+						
+
+						if (c2->center.x > c1->center.x) {
+							// c1 esta a la derecha de c2
+							object->Position.x += mx;
+							other->Position.x += mx;
+							//object->Velocity.x = other->Velocity.x;
+							//object->Position.x += mx;
+							//object->Velocity.x = other->Velocity.x;
+							//object->Force.x = other->Force.x * 0.5f;
+						}
+						else if (c2->center.x < c1->center.x) {
+							// c1 esta a la izquierda de c2
+							object->Position.x -= mx;
+							other->Position.x -= mx;
+							//object->Velocity.x = other->Velocity.x;
+							//object->Position.x -= mx;
+							//object->Velocity.x = other->Velocity.x;
+							//object->Force.x = other->Force.x * 0.5f;
+						}
+
+						if(c2->center.y > c1->center.y) {
+							// c1 esta abajo de c2
+							object->Position.y -= my;
+							other->Position.y -= my;
+							//object->Velocity.y = other->Velocity.y;
+						} else if (c2->center.y < c1->center.y) {
+							// c1 esta arriba de c2
+							object->Position.y += my;
+							other->Position.y += my;
+							//object->Velocity.y = other->Velocity.y;
+						}
+
+						object->Velocity = other->Velocity;
+
+					}
+
+					if (object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE &&
+						other->collisionObjectType == PhysicsObject::CollisionObjectType::SEGMENT) {
+
+						Circle* c1 = (Circle*)objCollider1;
+						Segment* s1 = (Segment*)objCollider2;
+						Vector2f vs1 = s1->toVector();
+
+						if (vs1.x == 0.0f && vs1.y != 0.0f) {
+							//Linea vertical
+							float dx = fabs(c1->center.x - s1->p1.x);
+							if (c1->center.x > s1->p1.x) {
+								object->Position.x += dx;
+							}
+
+							if (c1->center.x < s1->p1.x) {
+								object->Position.x -= dx;
+							}
+						}
+
+						if (vs1.x != 0.0f && vs1.y == 0.0f) {
+
+							if (c1->center.y < s1->p1.y) {
+								object->Position.y = s1->p1.y - (2.0f * c1->radius);
+							}
+						}
+
+					}
 					//object->Force = reflected;
 					/*reflected.x = reflected.x < 0 ? -1.0f : reflected.x > 0 ? 1.0f : 0.0f;
 					reflected.y = reflected.y < 0 ? -1.0f : reflected.y > 0 ? 1.0f : 0.0f;
@@ -110,9 +204,19 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 
 					object->Velocity.x *= reflected.x;
 					object->Velocity.y *= reflected.y;*/
+
+					Vector2f reflected = Vector2f::Reflect(object->Velocity, tangent);
+
 					object->Velocity = reflected;
 					object->Velocity.x *= other->ElasticK;
 					object->Velocity.y *= other->ElasticK;
+
+
+					Vector2f F_reflected = reflected.normalize();
+					object->Force.x = F_reflected.x * other->ElasticK;
+					//object->Force.y = F_reflected.x * other->ElasticK;
+					
+
 
 					Vector2f F_Normal = tangent.normal();
 					F_Normal.x *= -object->Force.x;
@@ -121,11 +225,25 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 					object->Force += F_Friction;
 
 					
+
+					
 					float dy = abs(F_Friction.y);
 					float dx = abs(F_Friction.x);
 					if (dy < 1.0f) {
  						object->Force.y = 0.0f;
 						object->Force.y = -G * object->Mass;
+
+						if (object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE &&
+							other->collisionObjectType == PhysicsObject::CollisionObjectType::SEGMENT &&
+							F_Normal.x == 0.0f) {
+							object->isActive = object->isActive;
+							//object->isActive = false;
+						}
+						
+					}
+
+					if (dx < 1.0f) {
+						object->Force.x = 0.0f;
 					}
 
 

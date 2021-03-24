@@ -2,6 +2,7 @@
 #include "Circle.h"
 #include <iostream>
 
+
 Tank::Tank(glm::vec2 pos, glm::vec2 size, Texture2D sprite, const Texture2D& gun_texture, const Texture2D& arrow_texture, const Texture2D& projectile_texture, 
     glm::vec3 color, glm::vec2 velocity) :
 	GameObject(pos, size, sprite, color, velocity) {
@@ -70,6 +71,16 @@ void Tank::update(GLFWwindow* window)
     gun->Rotation = angle_shot;
     arrow->Rotation = angle_shot;
 
+
+    size_t size = projectiles.size();
+    for (int i = 0; i < size; i++) {
+        Projectile* p = projectiles[i];
+        if(!p->phys.isActive) {
+            p->StartDecaying = true;
+        }
+        p->Update();
+    }
+
     
 }
 
@@ -81,7 +92,14 @@ void Tank::Draw(SpriteRenderer& renderer)
 
     size_t size = projectiles.size();
     for (int i = 0; i < size; i++) {
-        projectiles[i]->Draw(renderer);
+        Projectile* p = projectiles[i];
+        //p->Draw(renderer);
+        if (p->Life > 0.0f) {
+            p->Draw(renderer);
+        } else {
+            p->phys.shouldRemove = true;
+        }
+        
     }
     
 
@@ -90,7 +108,7 @@ void Tank::Draw(SpriteRenderer& renderer)
 void Tank::shootBall() 
 {
     glm::vec2 size = glm::vec2(10.0f, 10.0f);
-    GameObject* projectile = new GameObject(glm::vec2(0.0f, 0.0f), size, ptexture);
+    Projectile* projectile = new Projectile(glm::vec2(0.0f, 0.0f), size, ptexture);
 
     projectile->phys.Mass = 0.1f;
     //projectile->t = mWorldRef->t;
@@ -103,14 +121,18 @@ void Tank::shootBall()
     projectile->phys.Velocity = Vector2f(0.0f, 0.0f);
 
     std::cout << "INITIAL_SPEED = " << initial_shot_speed << std::endl;
+    std::cout << "ANGLE = " << (90-angle_shot) << std::endl;
     
     projectile->phys.Force.x = initial_shot_speed * cos(rad_angle_shot);
     projectile->phys.Force.y = -initial_shot_speed * sin(rad_angle_shot);
     projectile->phys.Force.y *= 1.5;
 
     projectile->phys.collisionObjectType = PhysicsObject::CollisionObjectType::CIRCLE;
-    projectile->phys.collisionInfo.radius = projectile->Size.x;
+    projectile->phys.collisionInfo.radius = projectile->Size.x / 2.0f;
     projectile->phys.collisionResponse = true;
+    projectile->phys.ElasticK = 1.0f;
+    projectile->phys.Friction.x = 0.1f;
+    projectile->phys.Friction.y = 0.1f;
     //objCollision = new Circle(projectile->phys.Position.x, projectile->phys.Position.y, projectile->Size.x);
 
     

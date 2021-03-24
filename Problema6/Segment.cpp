@@ -1,5 +1,6 @@
 #include "Segment.h"
 #include "Circle.h"
+#include <math.h>
 
 Segment::Segment() 
 {
@@ -16,7 +17,7 @@ Segment::Segment(float x1, float y1, float x2, float y2) {
 
 float Segment::length() const {
     float dx = p2.x - p1.x;
-    float dy = p2.y - p2.y;
+    float dy = p2.y - p1.y;
     return sqrt(((double)dx * dx) + ((double)dy * dy));
 }
 
@@ -25,7 +26,17 @@ Vector2f Segment::toVector() const {
     float dy = p2.y - p1.y;
     float slope = dy / dx;
     float angle = atan(slope);
-    return Vector2f(cos(angle), sin(angle));
+    float x = cos(angle);
+    float y = sin(angle);
+
+    if (fabs(x) < 0.0001f) {
+        x = 0.0f;
+    }
+    if (fabs(y) < 0.0001f) {
+        y = 0.0f;
+    }
+
+    return Vector2f(x, y);
 
 }
 
