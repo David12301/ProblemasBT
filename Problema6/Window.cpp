@@ -200,29 +200,56 @@ void Window::loadObjects()
     line3->phys.Friction.y = 0.1f;
     line3->phys.ElasticK = 0.9f;
 
-    //size = glm::vec2(20.0f, 80.0f);
-    //gun = new GameObject(glm::vec2(tank->Position.x + tank->Size.x/2 - size.x/2, 
-    //    tank->Position.y - size.y), size, ResourceManager::GetTexture("gun"));
-    //
-    //size = glm::vec2(20.0f, 75.0f);
-    //arrow = new GameObject(glm::vec2(tank->Position.x + tank->Size.x / 2 - size.x / 2,
-    //    tank->Position.y - size.y), size, ResourceManager::GetTexture("arrow"));
 
-    //// Para que giren del extremo inferior en vez del centro de la imagen
-    //gun->RotationCenter.y = 1.0f;
-    //arrow->RotationCenter.y = 1.0f;
+    size = glm::vec2(800.0f, 2.0f);
+    GameObject* line4 = new GameObject(glm::vec2(0.0f, 50.0f), size, ResourceManager::GetTexture("line"));
+    line4->phys.Mass = 1.0f;
+    line4->phys.affectedByGravity = false;
+    line4->phys.collisionObjectType = PhysicsObject::CollisionObjectType::SEGMENT;
+    line4->phys.collisionInfo.x1 = 0.0f;
+    line4->phys.collisionInfo.x2 = 800.0f;
+    line4->phys.collisionInfo.y1 = 50.0f;
+    line4->phys.collisionInfo.y2 = 50.0f;
+    line4->phys.collisionResponse = false;
+    line4->phys.Friction.x = 0.1f;
+    line4->phys.Friction.y = 0.1f;
+    line4->phys.ElasticK = 0.9f;
 
-    //tank->gun = gun;
-    //tank->arrow = arrow;
+
+
+
+   /* float diffy = 6.0f;
+    size = glm::vec2(800.0f, 2.0f);
+    GameObject* line5 = new GameObject(glm::vec2(0.0f, height - size.y - diffy), size, ResourceManager::GetTexture("line"));
+    line5->phys.Mass = 1.0f;
+    line5->phys.affectedByGravity = false;
+    x1 = line5->phys.Position.x;
+    y1 = line5->phys.Position.y;
+    x2 = x1 + size.x;
+    line5->phys.collisionObjectType = PhysicsObject::CollisionObjectType::SEGMENT;
+    line5->phys.collisionInfo.x1 = x1;
+    line5->phys.collisionInfo.x2 = x2;
+    line5->phys.collisionInfo.y1 = y1;
+    line5->phys.collisionInfo.y2 = y1;
+    line5->phys.collisionResponse = false;
+    line5->phys.Friction.x = 0.1f;
+    line5->phys.Friction.y = 0.1f;
+    line5->phys.ElasticK = 0.9f;*/
+    
+
 
     pworld->Objects.push_back(&line1->phys);
     pworld->Objects.push_back(&line2->phys);
     pworld->Objects.push_back(&line3->phys);
+    pworld->Objects.push_back(&line4->phys);
+    //pworld->Objects.push_back(&line5->phys);
 
     mObjects.push_back(tank);
     mObjects.push_back(line1);
     mObjects.push_back(line2);
     mObjects.push_back(line3);
+    mObjects.push_back(line4);
+    //mObjects.push_back(line5);
     //mObjects.push_back(gun);
     //mObjects.push_back(arrow);
 

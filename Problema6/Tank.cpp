@@ -55,7 +55,7 @@ void Tank::update(GLFWwindow* window)
 
     static bool pressed = false;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        initial_shot_speed += 0.5f;
+        initial_shot_speed += 1.0f;
         pressed = true;
     }
 
@@ -107,6 +107,10 @@ void Tank::Draw(SpriteRenderer& renderer)
 
 void Tank::shootBall() 
 {
+    initial_shot_speed += 30.0f;
+
+    initial_shot_speed = initial_shot_speed > 55.0f ? 55.0f : initial_shot_speed;
+
     glm::vec2 size = glm::vec2(10.0f, 10.0f);
     Projectile* projectile = new Projectile(glm::vec2(0.0f, 0.0f), size, ptexture);
 

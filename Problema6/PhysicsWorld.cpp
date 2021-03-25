@@ -9,11 +9,11 @@ PhysicsWorld::PhysicsWorld() {
 	G = 9.81f;
 	objCollider1 = nullptr;
 	objCollider2 = nullptr;
+	max_velocity = 600.0f;
 }
 
 void PhysicsWorld::Update() {
 
-	
 	for (int i = 0; i < Objects.size(); i++) {
 		PhysicsObject* object = Objects[i];
 
@@ -22,9 +22,12 @@ void PhysicsWorld::Update() {
 			continue;
 		}
 
-		Round(&object->Velocity);
-		Round(&object->Position);
-		Round(&object->Force);
+		//Round(&object->Velocity);
+		//Round(&object->Position);
+		//Round(&object->Force);
+
+		object->Velocity.x = object->Velocity.x > max_velocity ? max_velocity : object->Velocity.x;
+		object->Velocity.y = object->Velocity.y > max_velocity ? max_velocity : object->Velocity.y;
 
 
 		Vector2f temp_pos = object->Position;
@@ -190,7 +193,7 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 
 						if (vs1.x != 0.0f && vs1.y == 0.0f) {
 
-							if (c1->center.y < s1->p1.y) {
+							if (c1->center.y < s1->p1.y && s1->p1.y != 50.0f) {
 								object->Position.y = s1->p1.y - (2.0f * c1->radius);
 							}
 						}
@@ -232,21 +235,20 @@ void PhysicsWorld::CheckCollisions(PhysicsObject* object)
 					if (dy < 1.0f) {
  						object->Force.y = 0.0f;
 						object->Force.y = -G * object->Mass;
-
-						if (object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE &&
-							other->collisionObjectType == PhysicsObject::CollisionObjectType::SEGMENT &&
-							F_Normal.x == 0.0f) {
-							object->isActive = object->isActive;
-							//object->isActive = false;
-						}
-						
 					}
 
 					if (dx < 1.0f) {
 						object->Force.x = 0.0f;
 					}
 
-
+					if (dy < 1.0f && dx < 0.1f) {
+						if (object->collisionObjectType == PhysicsObject::CollisionObjectType::CIRCLE &&
+							other->collisionObjectType == PhysicsObject::CollisionObjectType::SEGMENT &&
+							F_Normal.x == 0.0f) 
+						{
+							object->isActive = false;
+						}
+					}
 
 
 					/*

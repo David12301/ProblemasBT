@@ -9,7 +9,7 @@ class PhysicsWorld {
 public:
 	std::vector<PhysicsObject*> Objects;
 	float G, dt, t;
-
+	float max_velocity;
 
 	Shape* objCollider1;
 	Shape* objCollider2;

@@ -1,18 +1,30 @@
-Las funciones que tienen que ver con la lógica del programa son:
+Se utilizó lo siguiente como referencia:
+https://www.youtube.com/watch?v=_3dRFu3k8Nw&list=WL&index=3&t=1610s&ab_channel=TeacherChannel
+https://www.youtube.com/watch?v=-_IspRG548E&list=WL&index=4&t=315s&ab_channel=Winterdev
 
-void loadChessBoard(const char* fname);
-void drawChessBoard(glm::vec2 initPosition);
+Se implementó una mini simulación de un pequeño tanque que puede lanzar bolitas verdes.
 
-Su implementación se encuentra en las líneas 128 y 176 del archivo Window.cpp.
+El trabajo está en:
 
-Todo el resto del código es para inicializar la ventana y usar gráficos con las
-librerías de openGL y una librería de código abierto compartida de este sitio web:
+PhysicsWorld.h, PhysicsWorld.cpp (movimiento de los objetos, respuesta a la colisión, generales, etc.).
+
+Circle.h, Circle.cpp, Segment.h, Segment.cpp (detección de colisión)
+
+Vector2f.h (Generalidades para calculo con vectores en 2D)
+
+Tank.h, Tank.cpp (Clase que controla la lógica de movimiento del tanque y lanzamiento)
+
+Projectile.h (Algunas variables para controlar cuando desaparecen los projectiles una vez que no se muevan)
+
+Window.cpp (Inicialización de los objetos en: Window::loadObjects() línea 145)
+
+Cree un simulador para disparar balas circulares. Considerar por simplicidad un cuarto rectangular cerrado y de gravedad G. Las balas deben de chocar contra las
+paredes y entre ellas, luego de un tiempo de estar inmóviles deben desaparecer. 
+
+El resto de archivos son tomados de la misma librería del ejercicio anterior:
 https://learnopengl.com/
 https://github.com/JoeyDeVries/LearnOpenGL/tree/master/src/7.in_practice/3.2d_game/0.full_source
 
-El programa carga los datos de un archivo .txt llamado chess.txt (vease main.cpp).
-Si no encuentra el archivo muestra un mensaje de error en la consola y carga la 
-posición de ajedrez por defecto.
 
-Alternativamente, se puede cargar los datos que desee desde la línea 144 que chanca
-los datos cargados.
+Video demo:
+https://www.youtube.com/watch?v=dcAP6-qGB9w
